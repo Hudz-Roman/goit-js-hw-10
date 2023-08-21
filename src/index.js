@@ -1,30 +1,51 @@
 import { fetchBreeds, fetchCatByBreed } from './js/cat-api';
-import {
-  createCatInfoMarkup,
-  createOptionsMarkup,
-  getCatsInfo,
-} from './js/markup';
 
-import { Report } from 'notiflix/build/notiflix-report-aio';
+import Notiflix from 'notiflix';
 import SlimSelect from 'slim-select';
 import 'slim-select/dist/slimselect.css';
 
-const selectEl = document.querySelector('#js-select');
-const catInfo = document.querySelector('.cat-info');
+const selectEl = document.querySelector('.breed-select');
+const catInfoEl = document.querySelector('.cat-info');
 const loaderEl = document.querySelector('.loader');
 const errorEL = document.querySelector('.error');
 
+//* ===================== Markup ============================
+
+function optionsMarkup(arr) {
+  return arr
+    .map(({ id, name }) => `<option value='${id}'>${name}</option>`)
+    .join();
+}
+
+function catInfoMarkup(arr) {
+  return arr
+    .map(
+      ({
+        url,
+        breeds,
+      }) => `<img class="cat-img" src="${url}" alt="${breeds[0].name}" width="400">
+    <div class="wrapper">
+    <h1 class="cat-breed">${breeds[0].name}</h1>
+    <p class="cat-descr">${breeds[0].description}</p>
+    <p class="cat-temp"><b>Temperament: </b>${breeds[0].temperament}</p>
+    </div>`
+    )
+    .join();
+}
+
+//* ========================================================
+
 selectEl.addEventListener('change', onSelect);
 
-function onSelect(evt) {
-  catInfo.innerHTML = '';
+function onSelect(e) {
+  catInfoEl.innerHTML = '';
 
-  let breedsId = evt.target.value;
+  let breedIds = e.target.value;
   hidden();
 
-  fetchCatByBreed(breedsId)
+  fetchCatByBreed(breedIds)
     .then(resp => {
-      setMarkup(catInfo, createCatInfoMarkup(resp.data));
+      setMarkup(catInfoEl, catInfoMarkup(resp.data));
       hidden();
     })
     .catch(fetchError);
@@ -32,11 +53,9 @@ function onSelect(evt) {
 
 fetchBreeds()
   .then(resp => {
-    const cat = resp.data;
-    setMarkup(selectEl, createOptionsMarkup(cat));
+    setMarkup(selectEl, optionsMarkup(resp.data));
     slim();
     hidden();
-    getCatsInfo(cat);
   })
   .catch(fetchError);
 
