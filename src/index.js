@@ -35,6 +35,22 @@ function catInfoMarkup(arr) {
 
 //* ========================================================
 
+let isFirstLoad = true;
+
+function hideOnFirstLoad(element) {
+  if (isFirstLoad && element && !element.classList.contains('is-hidden')) {
+    element.classList.add('is-hidden');
+    isFirstLoad = false;
+  }
+}
+
+hideOnFirstLoad(selectEl);
+
+if (loaderEl.classList.contains('is-hidden')) {
+  selectEl.classList.remove('is-hidden');
+  isFirstLoad = false;
+}
+
 selectEl.addEventListener('change', onSelect);
 
 function onSelect(e) {
@@ -75,5 +91,7 @@ function hidden() {
 }
 
 function fetchError() {
-  Report.failure('Error download', `${errorEL.textContent}`, 'OK');
+  Notiflix.Notify.failure(errorEL.textContent);
+  loaderEl.classList.toggle('is-hidden');
+  selectEl.classList.toggle('is-hidden');
 }

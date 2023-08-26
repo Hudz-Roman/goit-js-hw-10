@@ -6,12 +6,14 @@ const API_KEY =
 
 axios.defaults.headers.common['x-api-key'] = API_KEY;
 
-function fetchBreeds() {
+export function fetchBreeds() {
   return axios.get(`${BASE_URL}breeds`);
 }
 
-function fetchCatByBreed(breedId) {
-  return axios.get(`${BASE_URL}images/search?breed_ids=${breedId}`);
-}
+export function fetchCatByBreed(breedId) {
+  const params = {
+    breed_ids: breedId,
+  };
 
-export { fetchBreeds, fetchCatByBreed };
+  return axios.get(`${BASE_URL}images/search`, { params });
+}
