@@ -33,24 +33,6 @@ function catInfoMarkup(arr) {
     .join();
 }
 
-//* ========================================================
-
-let isFirstLoad = true;
-
-function hideOnFirstLoad(element) {
-  if (isFirstLoad && element && !element.classList.contains('is-hidden')) {
-    element.classList.add('is-hidden');
-    isFirstLoad = false;
-  }
-}
-
-hideOnFirstLoad(selectEl);
-
-if (loaderEl.classList.contains('is-hidden')) {
-  selectEl.classList.remove('is-hidden');
-  isFirstLoad = false;
-}
-
 selectEl.addEventListener('change', onSelect);
 
 function onSelect(e) {
