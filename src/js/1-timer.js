@@ -38,15 +38,13 @@ flatpickr(dateTimePicker, options);
 startButton.addEventListener('click', () => {
   const selectedDate = new Date(dateTimePicker.value);
 
-  if (countdownInterval) {
-    clearInterval(countdownInterval);
-  }
-
   countdownInterval = setInterval(updateCountdown, 1000);
 
   function updateCountdown() {
     const currentTime = new Date().getTime();
     const timeDifference = selectedDate.getTime() - currentTime;
+
+    startButton.disabled = true;
 
     if (timeDifference <= 0) {
       clearInterval(countdownInterval);
@@ -55,6 +53,7 @@ startButton.addEventListener('click', () => {
         message: 'Countdown finished!',
         position: 'topRight',
       });
+      startButton.disabled = false;
       return;
     }
 
