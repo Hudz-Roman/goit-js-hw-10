@@ -11,6 +11,7 @@ const minutesDisp = document.querySelector('[data-minutes]');
 const secondsDisp = document.querySelector('[data-seconds]');
 
 let countdownInterval;
+startButton.disabled = true;
 
 const options = {
   enableTime: true,
@@ -45,6 +46,7 @@ startButton.addEventListener('click', () => {
     const timeDifference = selectedDate.getTime() - currentTime;
 
     startButton.disabled = true;
+    dateTimePicker.disabled = true;
 
     if (timeDifference <= 0) {
       clearInterval(countdownInterval);
@@ -54,6 +56,7 @@ startButton.addEventListener('click', () => {
         position: 'topRight',
       });
       startButton.disabled = false;
+      dateTimePicker.disabled = false;
       return;
     }
 
